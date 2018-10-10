@@ -1,0 +1,26 @@
+---
+- name: Get a list of existing gpg keys.
+  command: gpg --list-keys --with-colons
+  changed_when: false
+  register: gpg_existing_keys
+
+- name: Render generate keys template for use in batch generate keys.
+  set_fact:
+    gpg_generate_keys_batch: "{{ lookup('template', 'generate-keys.j2') | trim }}"
+
+- name: Create temporary directory for use in gpg tasks.
+  tempfile:
+    state: directory
+  when: gpg_generate_keys_batch|length > 0
+  register: gpg_tempfile
+
+- name: Write generate keys batch file to temporary directory.
+  copy:
+    content: "{{ gpg_generate_keys_batch }}"
+    dest: "{{ gpg_tempfile.path }}/generate-keys-batch-parameters"
+    mode: 0600
+  when: gpg_generate_keys_batch|length > 0
+
+- name: Generate gpg keys.
+  command: gpg --batch --generate-key "{{ gpg_tempfile.path }}/generate-keys-batch-parameters"
+  when: gpg_generate_keys_batch|length > 0

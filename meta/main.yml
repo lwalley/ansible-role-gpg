@@ -1,0 +1,15 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: lwalley
+  description: Generates keys with gpg on macOS.
+  license: license (MIT)
+  min_ansible_version: 2.6
+  platforms:
+    - name: macOS
+      versions:
+      - all
+      - any
+  galaxy_tags:
+    - development

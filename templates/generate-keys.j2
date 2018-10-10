@@ -1,0 +1,14 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
+{% if gpg_keys is defined and gpg_keys %}
+  {% for key in gpg_keys %}
+    {% if key.lookup is defined and key.lookup not in gpg_existing_keys.stdout and key.config is defined and key.config -%}
+      %echo Generating gpg key.
+      {% for config in key.config -%}
+        {{ config.0 }}: {{ config.1 }}
+      {% endfor -%}
+      %commit
+      {# Remove indentation from next line. -#}
+      %echo done
+    {% endif %}
+  {% endfor %}
+{% endif %}
