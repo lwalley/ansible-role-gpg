@@ -1,6 +1,6 @@
 # Ansible Role: GPG
 
-Generate keys with [gnupg2][gnupg2].
+Generate keys with [gnupg2][gnupg2] on macOS.
 
 ## Requirements
 
